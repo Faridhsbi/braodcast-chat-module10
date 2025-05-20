@@ -16,3 +16,9 @@ Pada skenario ini, server dikonfigurasi untuk menggunakan port 2000, sedangkan k
 
 ![same](images/same-port.png)
 Setelah port server diubah dari 2000 menjadi 8080, menyesuaikan `TcpListener::bind("127.0.0.1:8080")` dan URI klien diubah menjadi `ws://127.0.0.1:8080`, klien dapat terhubung kembali. Dengan port dan protokol yang sama, semua pesan dari klien berhasil dibroadcast oleh server ke seluruh klien yang terhubung, membuktikan bahwa kesamaan port adalah syarat mutlak untuk komunikasi dua arah dalam aplikasi ini.
+
+### 2.3 Small changes. Add some information to client
+
+![4](images/4.png)
+
+Saya menambahkan penyertaan alamat IP dan port pengirim pada setiap pesan broadcast dengan mengganti baris `bcast_tx.send(text.into())?`; menajdi b`cast_tx.send(format!("{addr:?}: {text:?}"))?;` di fungsi handle_connection pada src/bin/server.rs. Setelah perubahan ini, setiap kali server menerima pesan, ia mencetak alamat SocketAddr pengirimnya lalu menyiarkan `addr: message` ke semua klien, sehingga kini tiap klien dapat melihat dari mana pesan tersebut berasal.
